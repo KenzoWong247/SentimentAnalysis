@@ -51,8 +51,8 @@ def loadPositiveReviews():
 neg = loadNegativeReviews()
 pos = loadPositiveReviews()
 
-train_set = neg[:750] + pos[750:]
-test_set = neg[750:] + pos[:750]
+train_set = neg[:400] + pos[400:]
+test_set = neg[400:] + pos[:400]
 
 classifier = NaiveBayesClassifier.train(train_set)
 
