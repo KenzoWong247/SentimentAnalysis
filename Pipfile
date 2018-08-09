@@ -9,6 +9,8 @@ flask = "*"
 flask-bootstrap = "*"
 flask-wtf = "*"
 "bs4" = "*"
+request = "*"
+requests = "*"
 
 [dev-packages]
 
