@@ -36,7 +36,7 @@ def loadNegativeReviews():
     reviews = []
 
 
-    for review in movie_reviews.fileids('neg')
+    for review in movie_reviews.fileids('neg'):
         reviews.append(review)
     reviews = reviews[:300]
     for review in reviews:
@@ -47,7 +47,7 @@ def loadNegativeReviews():
 def loadPositiveReviews():
     pos_reviews = []
     reviews = []
-    for review in movie_reviews.fileids('pos')
+    for review in movie_reviews.fileids('pos'):
         reviews.append(review)
     reviews = reviews[:300]
     for review in reviews:
