@@ -12,6 +12,7 @@ from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 from flask import render_template, request
 
+import numpy as np
 import nltk.classify.util
 from nltk.classify import NaiveBayesClassifier
 from nltk.corpus import movie_reviews
@@ -31,7 +32,7 @@ def create_word_features(words):
 
 def loadNegativeReviews():
     neg_reviews = []
-    for fileid in movie_reviews.fileids():
+    for fileid in movie_reviews.fileids('neg'):
         print(fileid)
         words = movie_reviews.words(fileid)
         neg_reviews.append((create_word_features(words), "negative"))
@@ -40,7 +41,7 @@ def loadNegativeReviews():
 
 def loadPositiveReviews():
     pos_reviews = []
-    for fileid in movie_reviews.fileids():
+    for fileid in movie_reviews.fileids('pos'):
         words = movie_reviews.words(fileid)
         pos_reviews.append((create_word_features(words), "positive"))
     return pos_reviews
