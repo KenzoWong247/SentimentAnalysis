@@ -28,7 +28,7 @@ features = vectorizer.fit_transform(
     data
 )
 features_nd = features.toarray()
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
  
 X_train, X_test, y_train, y_test  = train_test_split(features_nd, data_labels, train_size=.96, random_state=1234)
 
