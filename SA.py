@@ -1,4 +1,14 @@
 from sklearn.feature_extraction.text import CountVectorizer
+
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+
+pageUrl = 'http://pythonforengineers.com/machine-learning-for-complete-beginners/'
+page = urlopen(pageUrl)
+soup = BeautifulSoup(page, 'html.parser')
+text = soup.find('p')
+print(text)
+
 data = []
 data_labels = []
 with open("./pos_tweets.txt") as f:
