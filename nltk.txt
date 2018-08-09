@@ -1,3 +1,2 @@
 movie_reviews
 stopwords
-NaiveBayesClassifier
