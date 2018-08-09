@@ -12,8 +12,8 @@ from nltk.corpus import wordnet
 import requests
 from model import Model
 
-@app.route('/')
-@app.route('/index', methods=['GET', 'POST'])
+@start.route('/')
+@start.route('/index', methods=['GET', 'POST'])
 
 def index():
 	errors = []
