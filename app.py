@@ -3,7 +3,6 @@ from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 from flask import render_template, request
 
-import numpy as np
 import nltk.classify.util
 from nltk.classify import NaiveBayesClassifier
 from nltk.corpus import movie_reviews
@@ -13,6 +12,17 @@ from nltk.corpus import wordnet
 
 import requests
 
+from flask import Flask
+from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
+import os
+
+app = Flask(__name__)
+
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+Bootstrap(app)
 
 # How Naive Bayes classifier accepts input
 def create_word_features(words):
@@ -97,4 +107,8 @@ def getPrediction(text, classifier):
 
     return sentiment, accuracy
 
+
+
+if __name__ == '__main__':
+    app.run()
 
