@@ -11,6 +11,10 @@ flask-wtf = "*"
 "bs4" = "*"
 request = "*"
 requests = "*"
+nltk = "*"
+"psycopg2" = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

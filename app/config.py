@@ -1,5 +1,28 @@
 import os
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-	SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+    DEBUG = False
+    TESTING = False
+    CSRF_ENABLED = True
+    SECRET_KEY = 'kenzo-wongs-secret-key-whahaha'
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+
+class StagingConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+
+class TestingConfig(Config):
+    TESTING = True
