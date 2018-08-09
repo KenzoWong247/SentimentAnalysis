@@ -1,13 +1,4 @@
-from flask import Flask
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-import os
 
-app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-Bootstrap(app)
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 from flask import render_template, request
@@ -107,5 +98,3 @@ def getPrediction(text, classifier):
     return sentiment, accuracy
 
 
-if __name__ == '__main__':
-    app.run()
