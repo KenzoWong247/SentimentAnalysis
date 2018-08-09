@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 gunicorn = "*"
+flask = "*"
+flask-bootstrap = "*"
+flask-wtf = "*"
+"bs4" = "*"
 
 [dev-packages]
 
