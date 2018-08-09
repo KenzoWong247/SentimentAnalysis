@@ -3,6 +3,6 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 class WebInput(FlaskForm):
-	webAddress = StringField('Site Address', validators=[DataRequired()])
+	webAddress = StringField('Enter Site Url', validators=[DataRequired()])
 	submit = SubmitField('Start')
 
