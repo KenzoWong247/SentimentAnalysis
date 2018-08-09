@@ -17,6 +17,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-script = "*"
 sqlalchemy = "*"
+autoenv = "==1.0.0"
 
 [dev-packages]
 
