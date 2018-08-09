@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from flask.ext.sqlalchemy import SQLAlchemy
-from app.config import Config
+from flask_sqlalchemy import SQLAlchemy
+import os
+from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -10,7 +11,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Bootstrap(app)
 
-from models import Result
-
-from app import routes
+if __name__ == '__main__':
+    app.run()
 

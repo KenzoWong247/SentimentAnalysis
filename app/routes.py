@@ -10,6 +10,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet
 
 import requests
+from model import Model
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
