@@ -2,6 +2,8 @@ from app import app
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 
+if __name__ == '__main__':
+    app.run()
 pageUrl = 'http://pythonforengineers.com/machine-learning-for-complete-beginners/'
 hdr = {'User-Agent': 'Mozilla/5.0'}
 req = Request(pageUrl, headers=hdr)
