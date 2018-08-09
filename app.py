@@ -38,7 +38,7 @@ def loadNegativeReviews():
         print(fileid)
         words = movie_reviews.words(fileid)
         reviews.append(words)
-        reviews = reviews[:400]
+        reviews = reviews[:300]
     for review in reviews:
         neg_reviews.append((create_word_features(review), "negative"))
     return neg_reviews
@@ -50,7 +50,7 @@ def loadPositiveReviews():
     for fileid in movie_reviews.fileids('pos'):
         words = movie_reviews.words(fileid)
         reviews.append(words)
-        reviews = reviews[:400]
+        reviews = reviews[:300]
     for review in reviews:
         pos_reviews.append((create_word_features(review), "positive"))
     return pos_reviews
