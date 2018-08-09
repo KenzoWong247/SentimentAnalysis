@@ -1,6 +1,4 @@
-from sklearn.feature_extraction.text import CountVectorizer
 from app import app
-
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 
@@ -9,7 +7,7 @@ hdr = {'User-Agent': 'Mozilla/5.0'}
 req = Request(pageUrl, headers=hdr)
 page = urlopen(req)
 soup = BeautifulSoup(page, 'html.parser')
-print(soup)
+#print(soup)
 
 #data = []
 #data_labels = []
