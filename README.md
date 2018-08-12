@@ -1,8 +1,10 @@
 # SentimentAnalysis
 
-python app.py to Run
+#To Run
+python app.py
 
-To Run with Herokugit push heroku master
+#To Run with Heroku
+git push heroku master
 
 heroku ps:scale web=1
 
