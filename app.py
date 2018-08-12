@@ -1,14 +1,14 @@
-
+import string
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 from flask import render_template, request
 
-import nltk.classify.util
-from nltk.classify import NaiveBayesClassifier
-from nltk.corpus import movie_reviews
+from itertools import chain
+
+from nltk.corpus import movie_reviews as mr
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk.corpus import wordnet
+from nltk.classify import NaiveBayesClassifier
+import nltk
 
 import requests
 
@@ -17,14 +17,20 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 import os
 
+from rq import Queue
+from rq.job import Job
+from worker import conn
+
 app = Flask(__name__)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 Bootstrap(app)
 
-# How Naive Bayes classifier accepts input
+q = Queue(connection=conn)
+
+
 def create_word_features(words):
     useful_words = [word for word in words if word not in stopwords.words("english")]
     my_dict = [(word, True) for word in useful_words]
@@ -33,26 +39,27 @@ def create_word_features(words):
 
 def loadNegativeReviews():
     neg_reviews = []
-
-    for fileid in movie_reviews.fileids('neg'):
-        words = movie_reviews.words(fileid)
+    for fileid in mr.fileids('neg')[:200]:
+        words = mr.words(fileid)
         neg_reviews.append((create_word_features(words), "negative"))
+        print(fileid)
     return neg_reviews
 
 
 def loadPositiveReviews():
     pos_reviews = []
-    for fileid in movie_reviews.fileids('pos'):
-        words = movie_reviews.words(fileid)
+    for fileid in mr.fileids('pos')[:200]:
+        words = mr.words(fileid)
         pos_reviews.append((create_word_features(words), "positive"))
+        print(fileid)
     return pos_reviews
 
 
 neg = loadNegativeReviews()
 pos = loadPositiveReviews()
 
-train_set = neg[:200] + pos[200:]
-test_set = neg[200:] + pos[:200]
+train_set = neg[:150] + pos[:150]
+test_set = neg[150:] + pos[150:]
 
 classifier = NaiveBayesClassifier.train(train_set)
 
@@ -64,21 +71,37 @@ def index():
     full_text = ""
     result = ""
     if request.method == "POST":
-        # get url that the person has entered
-        try:
-            url = request.form['url']
-            r = requests.get(url)
-        except:
-            errors.append(
-                "Unable to get URL. Please make sure it's valid and try again."
-            )
-            return render_template('index.html', errors=errors)
-        if r:
-            text = sentimentAnalysis(r)
-            sentiment, certainty = getPrediction(text)
-            result = "Prediction: " + sentiment + certainty
-
+        url = request.form['url']
+        job = q.enqueue_call(func=getUrlFromSite, args=(url,), result_ttl=5000)
+        print(job.get_id())
+        while result == "":
+            result = getResults(job.get_id())
+        return render_template('index.html', errors=errors)
     return render_template('index.html', errors=errors, full_text=full_text, result=result)
+
+
+def getResults(job_key):
+    job = Job.fetch(job_key, connection=conn)
+    if job.is_finished:
+        return str(job.result), 200
+    else:
+        return "", 202
+
+
+def getUrlFromSite(url):
+    errors = []
+    try:
+        r = requests.get(url)
+    except:
+        errors.append(
+            "Unable to get URL. Please make sure it's valid and try again."
+        )
+        return {"error": errors}
+
+    text = sentimentAnalysis(r)
+    sentiment, certainty = getPrediction(text)
+    result = "Prediction: " + sentiment + certainty
+    return result
 
 
 def convertToSentenceArray(paragraph):
@@ -97,18 +120,16 @@ def sentimentAnalysis(siteUrl):
     return visible_text
 
 
-def getAccuracy(train_set):
-    return nltk.classif.util.accuracy(train_set)
+def getAccuracy():
+    return nltk.classify.accuracy(classifier, train_set)
 
 
-def getPrediction(text, classifier):
-    accuracy = getAccuracy(classifier, text) * 100
+def getPrediction(text):
+    accuracy = getAccuracy(classifier) * 100
     sentiment = classifier.classify(text)
 
     return sentiment, accuracy
 
 
-
 if __name__ == '__main__':
     app.run()
-

@@ -19,6 +19,8 @@ flask-script = "*"
 sqlalchemy = "*"
 autoenv = "==1.0.0"
 numpy = "*"
+rq = "*"
+redis = "*"
 
 [dev-packages]
 
